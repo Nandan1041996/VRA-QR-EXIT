@@ -871,7 +871,7 @@
 
         .token-details {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 10px;
             margin-bottom: 28px;
         }
@@ -898,6 +898,13 @@
             color: var(--ink);
             font-family: 'DM Mono', monospace;
             word-break: break-all;
+        }
+
+        .token-detail-item-single {
+            padding: 20px 22px;
+        }
+        .token-detail-item-single .token-detail-value {
+            font-size: 1.3rem;
         }
 
         /* ── CONFETTI PIECES ── */
@@ -969,7 +976,7 @@
         <div class="token-heading" id="token-heading">Entry Approved!</div>
         <div class="token-sub" id="token-sub">Your access token has been generated</div>
         
-        <div class="ggid-display" id="ggid-display">GGID : <span id="ggid-text">—</span></div>
+        <!-- <div class="ggid-display" id="ggid-display">GGID : <span id="ggid-text">—</span></div>
 
         <div class="token-number-wrap" id="token-number-box">
             <div class="token-number-label">TOKEN NUMBER</div>
@@ -977,21 +984,16 @@
         </div>
 
         <div class="token-details" id="token-details">
-            <div class="token-detail-item">
-                <div class="token-detail-label">Vehicle No</div>
-                <div class="token-detail-value" id="td-vehicle">—</div>
+            <div class="token-detail-item token-detail-item-single">
+                <div class="token-detail-label">Token No.</div>
+                <div class="token-detail-value" id="td-tokenno">—</div>
             </div>
-            <div class="token-detail-item">
-                <div class="token-detail-label">Item Type</div>
-                <div class="token-detail-value" id="td-itemtype">—</div>
-            </div>
-            <div class="token-detail-item">
-                <div class="token-detail-label">LR No</div>
-                <div class="token-detail-value" id="td-lrno">—</div>
-            </div>
-            <div class="token-detail-item">
-                <div class="token-detail-label">V-Type / Tire</div>
-                <div class="token-detail-value" id="td-vtype">—</div>
+        </div> -->
+
+        <div class="token-details" id="token-details">
+            <div class="token-detail-item token-detail-item-single">
+                <div class="token-detail-label">Token No.</div>
+                <div class="token-detail-value" id="td-tokenno">—</div>
             </div>
         </div>
 
@@ -1079,6 +1081,46 @@
             </div>
         </div>
 
+        <!-- SCREEN 2: Verification -->
+        <div id="screen-verify" class="screen" style="display:none;">
+            <div class="screen-title" id="verify-title">Driver Verification</div>
+            <div class="screen-sub"  id="verify-sub">Enter your driving license details to proceed</div>
+
+            <div class="field-group">
+                <div class="field-label" id="lbl-dl">
+                    Driving License Number <span class="field-req">*</span>
+                </div>
+                <input
+                    type="text" id="dl-number" class="field-input"
+                    placeholder="15 to 19 characters DL number"
+                    maxlength="19"
+                    oninput="formatDL(this)"
+                    onblur="onDLBlur()"
+                    autocomplete="off" autocorrect="off" spellcheck="false"
+                >
+                <div class="dl-counter" id="dl-counter">0 / must be 15 to 19 characters</div>
+                <div class="field-hint" id="hint-dl">Alphanumeric only · between 15 and 19 characters</div>
+                <div class="field-error" id="dl-error"></div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label" id="lbl-dob">
+                    Date of Birth <span class="field-req">*</span>
+                </div>
+                <input type="date" id="dob" class="field-input" onchange="validateDOB()">
+                <div class="field-error" id="dob-error"></div>
+            </div>
+
+            <div class="verify-status" id="verify-status">
+                <div class="spinner"></div>
+                <span id="verify-status-text">Verifying…</span>
+            </div>
+
+            <button class="btn-primary" id="btn-verify" onclick="verifyDriver()">
+                <span id="btn-verify-text">Verify &amp; Continue →</span>
+            </button>
+        </div>
+
         <!-- SCREEN 3: QR Scanner -->
         <div id="screen-scanner" class="screen" style="display:none;">
             <div class="driver-chip"><span id="driver-chip-text">Verified Driver</span></div>
@@ -1145,7 +1187,7 @@ const LANG_MAP = {
         verifyTitle:'ડ્રાઇવર ચકાસણી',
         verifySub:'આગળ વધવા માટે તમારી લાઇસન્સ વિગત દાખલ કરો',
         lblDL:'ડ્રાઇવિંગ લાઇસન્સ નંબર', lblDOB:'જન્મ તારીખ',
-        hintDL:'માત્ર અક્ષરો અને સંખ્યા · ચોક્કસ 15 અથવા 19 અક્ષરો',
+        hintDL:'માત્ર અક્ષરો અને સંખ્યા · 15 થી 19 અક્ષરો વચ્ચે',
         btnVerify:'ચકાસો અને આગળ વધો →',
         scanHint:'કૅમેરાને વાહનના QR કોડ પર લઈ જાઓ',
         lblVehicle:'વાહન નંબર', btnReset:'આગળ વાહન સ્કૅન કરો',
@@ -1169,7 +1211,7 @@ const LANG_MAP = {
         verifyTitle:'चालक सत्यापन',
         verifySub:'आगे बढ़ने के लिए अपने लाइसेंस की जानकारी दर्ज करें',
         lblDL:'ड्राइविंग लाइसेंस नंबर', lblDOB:'जन्म तिथि',
-        hintDL:'केवल अक्षर और अंक · सटीक 15 या 19 अक्षर',
+        hintDL:'केवल अक्षर और अंक · 15 से 19 अक्षर के बीच',
         btnVerify:'सत्यापित करें और जारी रखें →',
         scanHint:'कैमरा वाहन के QR कोड पर ले जाएं',
         lblVehicle:'वाहन नंबर', btnReset:'अगला वाहन स्कैन करें',
@@ -1193,7 +1235,7 @@ const LANG_MAP = {
         verifyTitle:'Driver Verification',
         verifySub:'Enter your driving license details to proceed',
         lblDL:'Driving License Number', lblDOB:'Date of Birth',
-        hintDL:'Alphanumeric only · exactly 15 or 19 characters',
+        hintDL:'Alphanumeric only · between 15 and 19 characters',
         btnVerify:'Verify & Continue →',
         scanHint:'Point camera at the vehicle\'s QR code',
         lblVehicle:'Vehicle Number', btnReset:'Scan Next Vehicle',
@@ -1333,6 +1375,7 @@ function updateProgressDots(step) {
 //  INIT
 // ══════════════════════════════════════════════════════
 window.addEventListener('load', () => {
+    // document.getElementById('dob').max = new Date().toISOString().split('T')[0];
     loadVoices().then(() => {
         // Greeting in Gujarati — uses best available voice
         speak('ડ્રાઇવર QR સ્કૅનર. ભાષા પસંદ કરો.', 'gu-IN');
@@ -1478,6 +1521,33 @@ function resetVoiceDetect() {
     document.getElementById('voice-status').textContent = 'Cancelled. Tap a language above.';
 }
 
+// ══════════════════════════════════════════════════════
+//  SCREEN 2 — Driver Verification
+// ══════════════════════════════════════════════════════
+function goToVerify() {
+    goToScreen(2);
+    const L = LANG_MAP[selectedLang?.code] || LANG_MAP['en-IN'];
+    document.getElementById('verify-title').textContent    = L.verifyTitle;
+    document.getElementById('verify-sub').textContent      = L.verifySub;
+    document.getElementById('lbl-dl').innerHTML            = L.lblDL + ' <span class="field-req">*</span>';
+    document.getElementById('lbl-dob').innerHTML           = L.lblDOB + ' <span class="field-req">*</span>';
+    document.getElementById('hint-dl').textContent         = L.hintDL;
+    document.getElementById('btn-verify-text').textContent = L.btnVerify;
+    ['dl-number','dob'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('error','success');
+    });
+    document.getElementById('dl-error').classList.remove('show');
+    document.getElementById('dob-error').classList.remove('show');
+    document.getElementById('dl-counter').textContent  = '0 / must be 15 to 19 characters';
+    document.getElementById('dl-counter').className   = 'dl-counter';
+    document.getElementById('verify-status').className = 'verify-status';
+    document.getElementById('btn-verify').disabled = false;
+    const code = selectedLang?.code || 'en-IN';
+    setTimeout(() => speak(L.verifyPrompt, code), 400);
+}
+
 
 // ══════════════════════════════════════════════════════
 //  SCREEN 3 — QR Scanner
@@ -1521,19 +1591,6 @@ function onScanSuccess(decodedText) {
     const code = selectedLang?.code || 'en-IN';
     const L    = LANG_MAP[code] || LANG_MAP['en-IN'];
     speak(L.scanned, code);
-
-    // fetch(APPS_SCRIPT_URL, {
-    //     method:  'POST',
-    //     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    //     body: JSON.stringify({
-    //         action:        'scan',
-    //         licenseNumber: driverDL,
-    //         driverDOB:     driverDOB,
-    //         qrDetails:     decodedText,
-    //         sapStatus:     'A',
-    //         uniqueNo:      window._uniqueNo,
-    //     })
-    // })
 
     fetch(APPS_SCRIPT_URL, {
         method:  'POST',
@@ -1583,16 +1640,9 @@ function showTokenPopup(data, code, L) {
     const icon    = document.getElementById('token-icon');
     const heading = document.getElementById('token-heading');
     const sub     = document.getElementById('token-sub');
-    const tokenBox= document.getElementById('token-number-box');
-    const ggidBox = document.getElementById('ggid-display');
-    const ggidText= document.getElementById('ggid-text');
     const btnText = document.getElementById('btn-token-ok-text');
 
-    document.getElementById('td-vehicle').textContent  = qrFields.Vehicleno   || '—';
-    document.getElementById('td-itemtype').textContent = qrFields.Itemtypecode || '—';
-    document.getElementById('td-lrno').textContent     = qrFields.Lrno         || '—';
-    document.getElementById('td-vtype').textContent    = (qrFields.Vtype || '—') + ' / ' + (qrFields.Vtire || '—');
-
+    document.getElementById('td-tokenno').textContent = tokenNumber || '—';
     btnText.textContent = L.tokenBtn || 'Scan Next Vehicle';
 
     if (sapStatus === 'A') {
@@ -1601,11 +1651,12 @@ function showTokenPopup(data, code, L) {
         icon.innerHTML = '✓';
         heading.className = 'token-heading';
         heading.textContent = L.tokenHeading || 'Entry Approved!';
-        sub.textContent = L.tokenSub || 'Your access token has been generated';
-        tokenBox.style.display = 'block';
-        document.getElementById('token-number-display').textContent = tokenNumber;
-        if (ggid) { ggidBox.style.display = 'block'; ggidText.textContent = ggid; }
-        else { ggidBox.style.display = 'none'; }
+        sub.textContent = 'Result - ' + (sapMessage || L.tokenSub || 'Your access token has been generated');
+        // tokenBox.style.display = 'block';
+        // document.getElementById('token-number-display').textContent = tokenNumber;
+        // if (ggid) { ggidBox.style.display = 'block'; ggidText.textContent = ggid; }
+        // else { ggidBox.style.display = 'none'; }
+        // speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
         speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
         launchConfetti();
     } else {
@@ -1614,9 +1665,10 @@ function showTokenPopup(data, code, L) {
         icon.innerHTML = '✕';
         heading.className = 'token-heading error-text';
         heading.textContent = L.tokenDenied || 'Entry Denied!';
-        sub.textContent = sapMessage || 'Vehicle Blocked or Error occurred.';
-        tokenBox.style.display = 'none';
-        ggidBox.style.display = 'none';
+        sub.textContent = 'Result - ' + (sapMessage || 'Vehicle Blocked or Error occurred.');
+        // tokenBox.style.display = 'none';
+        // ggidBox.style.display = 'none';
+        // speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
         speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
     }
 
