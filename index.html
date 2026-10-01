@@ -1569,25 +1569,25 @@ function goToScannerScreen() {
     initializeScanner();
 }
 
-// function initializeScanner() {
-//     if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
-//     html5Scanner = new Html5QrcodeScanner("reader", { fps:10, qrbox:{width:240, height:240} }, false);
-//     html5Scanner.render(onScanSuccess, () => {});
-// }
-
 function initializeScanner() {
     if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
-    html5Scanner = new Html5QrcodeScanner("reader", {
-        fps: 20,
-        qrbox: { width: 240, height: 240 },
-        aspectRatio: 1.0,
-        disableFlip: false,
-        experimentalFeatures: {
-            useBarCodeDetectorIfSupported: true
-        }
-    }, false);
+    html5Scanner = new Html5QrcodeScanner("reader", { fps:10, qrbox:{width:240, height:240} }, false);
     html5Scanner.render(onScanSuccess, () => {});
 }
+
+// function initializeScanner() {
+//     if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
+//     html5Scanner = new Html5QrcodeScanner("reader", {
+//         fps: 20,
+//         qrbox: { width: 240, height: 240 },
+//         aspectRatio: 1.0,
+//         disableFlip: false,
+//         experimentalFeatures: {
+//             useBarCodeDetectorIfSupported: true
+//         }
+//     }, false);
+//     html5Scanner.render(onScanSuccess, () => {});
+// }
 
 function onScanSuccess(decodedText) {
     try { html5Scanner.clear(); } catch(e) {}
