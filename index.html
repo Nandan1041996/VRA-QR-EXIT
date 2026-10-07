@@ -1145,19 +1145,6 @@
                 <div class="step-pill" id="header-sub">Step 1 of 3 — Language</div>
             </div>
         </div>
-        <!-- <div style="display:flex;align-items:center;gap:12px;">
-            <div class="progress-dots" id="progress-dots">
-                <div class="progress-dot active" id="dot-1"></div>
-                <div class="progress-dot" id="dot-2"></div>
-                <div class="progress-dot" id="dot-3"></div>
-            </div>
-            <button id="btn-start-over" class="btn-start-over" onclick="fullReset()" style="display:none;" title="Start Over">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                </svg>
-            </button>
-        </div> -->
 
         <div class="header-right">
             <!-- Clock & Date -->
@@ -1279,20 +1266,6 @@
         <div id="screen-scanner" class="screen" style="display:none;">
             <div class="driver-chip"><span id="driver-chip-text">Verified Driver</span></div>
 
-            <!-- <div id="scanner-view">
-                <div class="scanner-wrap" style="display:flex; align-items:center; justify-content:center; min-height:160px;">
-                    <div style="text-align:center; padding:30px;">
-                        <div style="font-size:48px; margin-bottom:12px;">📷</div>
-                        <div style="font-size:2rem; font-weight:600; color:var(--ink);">Ready to Scan</div>
-                        <div style="font-size:1.85rem; color:var(--ink-muted); margin-top:6px;">Show the QR code to the Scanner</div>
-                    </div>
-                </div>  
-                <input type="text" id="gun-scan-input" autocomplete="off" autofocus style="width:90%; max-width:280px; margin:16px auto 0; display:block; padding:12px 16px; border:1.5px solid rgba(196,181,173,0.5); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:0.95rem; text-align:center; background:rgba(255,255,255,0.65);" placeholder="Scan QR here…">
-                <div class="scan-hint">
-                    <span class="tag">TIP :</span>
-                    <span id="scan-hint-text">Hold the QR code steady</span>
-                </div>
-            </div> -->
 
             <div id="scanner-view">
                 <div class="scanner-wrap" style="display:flex; align-items:center; justify-content:center; min-height:180px; padding: 20px;">
@@ -1316,14 +1289,16 @@
                 
                 <!-- "Active Listening" Input Field -->
                 <div style="position: relative; width: 90%; max-width: 300px; margin: 16px auto 0;">
-                    <input type="text" id="gun-scan-input" autocomplete="off" autofocus 
+                    <input type="text" id="gun-scan-input" autocomplete="off" 
                            style="width:100%; padding:14px 16px 14px 42px; border:2px solid rgba(16,185,129,0.35); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:0.95rem; font-weight:600; color:var(--ink); background:rgba(255,255,255,0.7); box-shadow:0 4px 12px rgba(16,185,129,0.08); outline:none; transition:all 0.3s ease;" 
                            placeholder="Waiting for scanner..." 
                            onfocus="this.style.borderColor='var(--sage)'; this.style.boxShadow='0 0 0 4px rgba(16,185,129,0.15), 0 4px 12px rgba(16,185,129,0.1)'"
                            onblur="this.style.borderColor='rgba(16,185,129,0.35)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.08)'">
                     
                     <!-- Pulsing Green Indicator Dot -->
-                    <div style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:8px; height:8px; border-radius:50%; background:var(--sage); animation:pulse-sage 2s infinite;"></div>
+                    <!-- <div style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:8px; height:8px; border-radius:50%; background:var(--sage); animation:pulse-sage 2s infinite;"></div> -->
+                    <!-- Pulsing Green Indicator Dot -->
+                    <div style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:8px; height:8px; border-radius:50%; background:var(--sage); animation:pulse-sage 2s infinite; pointer-events: none;"></div>
                 </div>
 
                 <div class="scan-hint">
@@ -1771,32 +1746,24 @@ function goToScannerScreen() {
     initializeScanner();
 }
 
-
-// function initializeScanner() {
-//     if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
-//     html5Scanner = new Html5QrcodeScanner("reader", {
-//         fps: 20,
-//         qrbox: { width: 240, height: 240 },
-//         aspectRatio: 1.0,
-//         disableFlip: false,
-//         experimentalFeatures: {
-//             useBarCodeDetectorIfSupported: true
-//         }
-//     }, false);
-//     html5Scanner.render(onScanSuccess, () => {});
-// }
-
 function initializeScanner() {
     const input = document.getElementById('gun-scan-input');
     input.value = '';
-    input.focus();
+    
+    // Wait for the slideUp animation to finish before dropping the cursor in
+    setTimeout(() => {
+        input.focus();
+    }, 500);
 
     input.addEventListener('keydown', handleGunInput);
 
     clearInterval(gunRefocusInterval);
     gunRefocusInterval = setInterval(() => {
         if (document.getElementById('screen-scanner').style.display !== 'none') {
-            input.focus();
+            // Check if the input already has focus before forcing it
+            if (document.activeElement !== input) {
+                input.focus();
+            }
         }
     }, 500);
 }
