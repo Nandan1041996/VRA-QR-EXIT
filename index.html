@@ -1126,17 +1126,17 @@
             <div class="driver-chip"><span id="driver-chip-text">Verified Driver</span></div>
 
             <div id="scanner-view">
-                <div class="scanner-wrap">
-                    <div class="corner corner-tl"></div>
-                    <div class="corner corner-tr"></div>
-                    <div class="corner corner-bl"></div>
-                    <div class="corner corner-br"></div>
-                    <div class="scan-line"></div>
-                    <div id="reader"></div>
+                <div class="scanner-wrap" style="display:flex; align-items:center; justify-content:center; min-height:220px;">
+                    <div style="text-align:center; padding:30px;">
+                        <div style="font-size:48px; margin-bottom:12px;">📷</div>
+                        <div style="font-size:1rem; font-weight:600; color:var(--ink);">Ready to Scan</div>
+                        <div style="font-size:0.85rem; color:var(--ink-muted); margin-top:6px;">Point the scanner at the QR code and press the trigger</div>
+                    </div>
                 </div>
+                <input type="text" id="gun-scan-input" autocomplete="off" autofocus style="width:90%; max-width:280px; margin:16px auto 0; display:block; padding:12px 16px; border:1.5px solid rgba(196,181,173,0.5); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:0.95rem; text-align:center; background:rgba(255,255,255,0.65);" placeholder="Scan QR here…">
                 <div class="scan-hint">
                     <span class="tag">TIP</span>
-                    <span id="scan-hint-text">Point camera at the vehicle's QR code</span>
+                    <span id="scan-hint-text">Hold the QR code steady and pull the trigger</span>
                 </div>
             </div>
 
@@ -1284,7 +1284,10 @@ let selectedLang      = null;
 let voiceDetected     = null;
 let driverDL          = '';
 let driverDOB         = '';
+// let html5Scanner      = null;
+// let autoResetTimer    = null;
 let html5Scanner      = null;
+let gunRefocusInterval = null;
 let autoResetTimer    = null;
 let countdownInterval = null;
 let recognition       = null;
@@ -1569,11 +1572,6 @@ function goToScannerScreen() {
     initializeScanner();
 }
 
-function initializeScanner() {
-    if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
-    html5Scanner = new Html5QrcodeScanner("reader", { fps:10, qrbox:{width:240, height:240} }, false);
-    html5Scanner.render(onScanSuccess, () => {});
-}
 
 // function initializeScanner() {
 //     if (html5Scanner) { try { html5Scanner.clear(); } catch(e) {} }
@@ -1589,8 +1587,40 @@ function initializeScanner() {
 //     html5Scanner.render(onScanSuccess, () => {});
 // }
 
+function initializeScanner() {
+    const input = document.getElementById('gun-scan-input');
+    input.value = '';
+    input.focus();
+
+    input.addEventListener('keydown', handleGunInput);
+
+    clearInterval(gunRefocusInterval);
+    gunRefocusInterval = setInterval(() => {
+        if (document.getElementById('screen-scanner').style.display !== 'none') {
+            input.focus();
+        }
+    }, 500);
+}
+
+function handleGunInput(e) {
+    if (e.key === 'Enter') {
+        const scannedText = e.target.value.trim();
+        if (scannedText.length > 0) {
+            e.target.value = '';
+            onScanSuccess(scannedText);
+        }
+    }
+}
+
+function stopScannerListener() {
+    clearInterval(gunRefocusInterval);
+    const input = document.getElementById('gun-scan-input');
+    if (input) input.removeEventListener('keydown', handleGunInput);
+}
+
 function onScanSuccess(decodedText) {
-    try { html5Scanner.clear(); } catch(e) {}
+    // try { html5Scanner.clear(); } catch(e) {}
+    stopScannerListener();
     document.getElementById('scanner-view').style.display  = 'none';
     document.getElementById('result-container').style.display = 'block';
     document.getElementById('qr-data').innerText = decodedText;
