@@ -1773,6 +1773,7 @@ function initializeScanner() {
 }
 
 function handleGunInput(e) {
+    console.log('Key event:', e.key, '| Value so far:', e.target.value);
     if (e.key === 'Enter') {
         const scannedText = e.target.value.trim();
         if (scannedText.length > 0) {
