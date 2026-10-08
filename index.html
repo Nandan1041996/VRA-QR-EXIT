@@ -1106,22 +1106,8 @@
 <div id="token-overlay">
     <div class="token-modal" id="token-modal">
         <div class="token-check" id="token-icon">✓</div>
-        <div class="token-heading" id="token-heading">Entry Approved!</div>
+        <div class="token-heading" id="token-heading">Gate Exit Approved!</div>
         <div class="token-sub" id="token-sub">Your access token has been generated</div>
-        
-        <!-- <div class="ggid-display" id="ggid-display">GGID : <span id="ggid-text">—</span></div>
-
-        <div class="token-number-wrap" id="token-number-box">
-            <div class="token-number-label">TOKEN NUMBER</div>
-            <div class="token-number" id="token-number-display">TKN---------</div>
-        </div>
-
-        <div class="token-details" id="token-details">
-            <div class="token-detail-item token-detail-item-single">
-                <div class="token-detail-label">Token No.</div>
-                <div class="token-detail-value" id="td-tokenno">—</div>
-            </div>
-        </div> -->
 
         <div class="token-details" id="token-details">
             <div class="token-detail-item token-detail-item-single">
@@ -1371,10 +1357,10 @@ const LANG_MAP = {
         sapB:'ડ્રાઇવર બ્લૉક છે. પ્રવેશ નહીં.',
         sapC:'સારથી API ચકાસણી જરૂરી.',
         sapE:'SAP ભૂલ. ફરી પ્રયાસ કરો.',
-        tokenHeading:'પ્રવેશ મંજૂર!',
+        tokenHeading:'ગેટ એક્ઝિટ મંજૂર!',
         tokenSub:'તમારો એક્સેસ ટોકન જનરેટ થઈ ગયો છે',
         tokenBtn:'આગળ વાહન સ્કૅન કરો',
-        tokenDenied:'પ્રવેશ નકારવામાં આવ્યો!',
+        tokenDenied:'ગેટ એક્ઝિટ નકારવામાં આવ્યો!',
     },
     'hi-IN': {
         name:'Hindi', native:'हिन्दी',
@@ -1395,10 +1381,10 @@ const LANG_MAP = {
         sapB:'चालक ब्लॉक है। प्रवेश नहीं।',
         sapC:'सारथी API जाँच आवश्यक।',
         sapE:'SAP त्रुटि। पुनः प्रयास करें।',
-        tokenHeading:'प्रवेश स्वीकृत!',
+        vtokenHeading:'गेट एग्ज़िट स्वीकृत!',
         tokenSub:'आपका एक्सेस टोकन जनरेट हो गया है',
         tokenBtn:'अगला वाहन स्कैन करें',
-        tokenDenied:'प्रवेश अस्वीकृत!',
+        tokenDenied:'गेट एग्ज़िट अस्वीकृत!',
     },
     'en-IN': {
         name:'English', native:'English',
@@ -1419,10 +1405,10 @@ const LANG_MAP = {
         sapB:'Driver is blocked. Entry denied.',
         sapC:'Sarathi API check required.',
         sapE:'SAP error. Please retry.',
-        tokenHeading:'Entry Approved!',
+        tokenHeading:'Gate Exit Approved!',
         tokenSub:'Your access token has been generated',
         tokenBtn:'Proceed → Scan Next Vehicle',
-        tokenDenied:'Entry Denied!',
+        tokenDenied:'Gate Exit Denied!',
     },
 };
 
@@ -1858,26 +1844,26 @@ function showTokenPopup(data, code, L) {
         icon.className = 'token-check';
         icon.innerHTML = '✓';
         heading.className = 'token-heading';
-        heading.textContent = L.tokenHeading || 'Entry Approved!';
+        heading.textContent = L.tokenHeading || 'Gate Exit Approved!';
         sub.textContent = 'Result - ' + (sapMessage || L.tokenSub || 'Your access token has been generated');
         // tokenBox.style.display = 'block';
         // document.getElementById('token-number-display').textContent = tokenNumber;
         // if (ggid) { ggidBox.style.display = 'block'; ggidText.textContent = ggid; }
         // else { ggidBox.style.display = 'none'; }
         // speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
-        speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
+        speak((L.tokenHeading || 'Gate Exit Approved') + '. Token ' + tokenNumber, code);
         launchConfetti();
     } else {
         modal.classList.add('error-state');
         icon.className = 'token-check error-icon';
         icon.innerHTML = '✕';
         heading.className = 'token-heading error-text';
-        heading.textContent = L.tokenDenied || 'Entry Denied!';
+        heading.textContent = L.tokenDenied || 'Gate Exit Denied!';
         sub.textContent = 'Result - ' + (sapMessage || 'Vehicle Blocked or Error occurred.');
         // tokenBox.style.display = 'none';
         // ggidBox.style.display = 'none';
         // speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
-        speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
+        speak((L.tokenDenied || 'Gate Exit Denied') + '. ' + (sapMessage || ''), code);
     }
 
     document.getElementById('token-overlay').classList.add('show');
