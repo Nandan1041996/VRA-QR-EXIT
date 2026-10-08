@@ -1117,7 +1117,7 @@
         </div>
 
         <button class="btn-primary" id="btn-token-ok" onclick="closeTokenPopup()" style="margin-top:0;">
-            <span id="btn-token-ok-text">Proceed → Scan Next Vehicle</span>
+            <span id="btn-token-ok-text">Proceed → Scan New QR Code</span>
         </button>
     </div>
 </div>
@@ -1297,7 +1297,7 @@
             </div>
 
             <div id="result-container">
-                <p class="result-label" id="lbl-vehicle">Vehicle Number</p>
+                <p class="result-label" id="lbl-vehicle">QR Code</p>
                 <div class="data-card">
                     <div id="qr-data"></div>
                 </div>
@@ -1321,7 +1321,7 @@
                 </div>
 
                 <button class="btn-primary" onclick="fullReset()">
-                    <span id="btn-reset-text">Scan Next Vehicle</span>
+                    <span id="btn-reset-text">Scan New QR Code</span>
                 </button>
             </div>
         </div>
@@ -1346,12 +1346,12 @@ const LANG_MAP = {
         hintDL:'માત્ર અક્ષરો અને સંખ્યા · 15 થી 19 અક્ષરો વચ્ચે',
         btnVerify:'ચકાસો અને આગળ વધો →',
         scanHint:'QR કોડને સ્કૅનર સામે સ્થિર રાખો',
-        lblVehicle:'વાહન નંબર', btnReset:'આગળ વાહન સ્કૅન કરો',
+        lblVehicle:'QR કોડ', btnReset:'નવો QR કોડ સ્કૅન કરો',
         verifyPrompt:'કૃપા કરીને તમારો ડ્રાઇવિંગ લાઇસન્સ નંબર દાખલ કરો.',
         dobPrompt:'હવે તમારી જન્મ તારીખ પસંદ કરો.',
         verifySuccess:'ચકાસણી સફળ. QR કૉડ સ્કૅન કરો.',
         verifyFail:'ચકાસણી નિષ્ફળ. કૃપા કરીને વિગતો ચકાસો.',
-        scanned:'વાહન નંબર સ્કૅન થઈ ગયો.',
+        scanned:'QR કોડ સફળતાપૂર્વક સ્કૅન થયો.',
         countdownMsg:'શરૂઆત પર પાછા…',
         sapA:'ડ્રાઇવર પ્રવેશ માટે મંજૂર છે.',
         sapB:'ડ્રાઇવર બ્લૉક છે. પ્રવેશ નહીં.',
@@ -1359,7 +1359,7 @@ const LANG_MAP = {
         sapE:'SAP ભૂલ. ફરી પ્રયાસ કરો.',
         tokenHeading:'ગેટ એક્ઝિટ મંજૂર!',
         tokenSub:'તમારો એક્સેસ ટોકન જનરેટ થઈ ગયો છે',
-        tokenBtn:'આગળ વાહન સ્કૅન કરો',
+        tokenBtn:'નવો QR કોડ સ્કૅન કરો',
         tokenDenied:'ગેટ એક્ઝિટ નકારવામાં આવ્યો!',
     },
     'hi-IN': {
@@ -1370,12 +1370,12 @@ const LANG_MAP = {
         hintDL:'केवल अक्षर और अंक · 15 से 19 अक्षर के बीच',
         btnVerify:'सत्यापित करें और जारी रखें →',
         scanHint:'QR कोड को स्कैनर के सामने स्थिर रखें',
-        lblVehicle:'वाहन नंबर', btnReset:'अगला वाहन स्कैन करें',
+        lblVehicle:'QR कोड', btnReset:'नया QR कोड स्कैन करें',
         verifyPrompt:'कृपया अपना ड्राइविंग लाइसेंस नंबर दर्ज करें।',
         dobPrompt:'अब अपनी जन्म तिथि चुनें।',
         verifySuccess:'सत्यापन सफल। QR कोड स्कैन करें।',
         verifyFail:'सत्यापन विफल। कृपया जानकारी जाँचें।',
-        scanned:'वाहन संख्या स्कैन हो गई।',
+        scanned:'QR कोड सफलतापूर्वक स्कैन हुआ।',
         countdownMsg:'शुरुआत पर वापस…',
         sapA:'चालक अनुमत है। प्रवेश दें।',
         sapB:'चालक ब्लॉक है। प्रवेश नहीं।',
@@ -1383,7 +1383,7 @@ const LANG_MAP = {
         sapE:'SAP त्रुटि। पुनः प्रयास करें।',
         vtokenHeading:'गेट एग्ज़िट स्वीकृत!',
         tokenSub:'आपका एक्सेस टोकन जनरेट हो गया है',
-        tokenBtn:'अगला वाहन स्कैन करें',
+        tokenBtn:'नया QR कोड स्कैन करें',
         tokenDenied:'गेट एग्ज़िट अस्वीकृत!',
     },
     'en-IN': {
@@ -1394,12 +1394,12 @@ const LANG_MAP = {
         hintDL:'Alphanumeric only · between 15 and 19 characters',
         btnVerify:'Verify & Continue →',
         scanHint:'Hold the QR code steady in front of the scanner',
-        lblVehicle:'Vehicle Number', btnReset:'Scan Next Vehicle',
+        lblVehicle:'QR Code', btnReset:'Scan New QR Code',
         verifyPrompt:'Please enter your driving license number.',
         dobPrompt:'Now select your date of birth.',
         verifySuccess:'Verification successful. Please scan the QR code.',
         verifyFail:'Verification failed. Please check your details.',
-        scanned:'Vehicle number scanned successfully.',
+        scanned:'QR code scanned successfully.',
         countdownMsg:'Returning to start…',
         sapA:'Driver is allowed. Grant entry.',
         sapB:'Driver is blocked. Entry denied.',
@@ -1407,7 +1407,7 @@ const LANG_MAP = {
         sapE:'SAP error. Please retry.',
         tokenHeading:'Gate Exit Approved!',
         tokenSub:'Your access token has been generated',
-        tokenBtn:'Proceed → Scan Next Vehicle',
+        tokenBtn:'Proceed → Scan New QR Code',
         tokenDenied:'Gate Exit Denied!',
     },
 };
@@ -1545,7 +1545,7 @@ window.addEventListener('load', () => {
     // -------------------------
     loadVoices().then(() => {
         // Greeting in Gujarati — uses best available voice
-        speak('ડ્રાઇવર QR સ્કૅનર. ભાષા પસંદ કરો.', 'gu-IN');
+        speak('ड्राइवर QR स्कैनर। कृपया अपनी भाषा चुनें।', 'hi-IN');
     });
     goToScreen(1);
 });
@@ -1837,7 +1837,7 @@ function showTokenPopup(data, code, L) {
     const btnText = document.getElementById('btn-token-ok-text');
 
     document.getElementById('td-tokenno').textContent = tokenNumber || '—';
-    btnText.textContent = L.tokenBtn || 'Scan Next Vehicle';
+    btnText.textContent = L.tokenBtn || 'Scan New QR Code';
 
     if (sapStatus === 'A') {
         modal.classList.remove('error-state');
