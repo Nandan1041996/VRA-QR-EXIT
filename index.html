@@ -234,12 +234,12 @@
         .kiosk-clock { font-family: 'DM Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
         .kiosk-date { font-size: 0.72rem; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .gate-ready-badge {
-            background: rgba(16, 185, 129, 0.12);
+            background: rgb(16 185 129);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            color: var(--sage);
+            color: #000000;
             padding: 8px 12px;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
             display: flex; align-items: center; gap: 6px;
             text-transform: uppercase;
@@ -280,7 +280,7 @@
             flex-shrink: 0; /* <-- ADD THIS LINE */
         }
         .footer-label { font-size: 0.72rem; color: var(--ink-muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
-        .status-dot { display: flex; align-items: center; gap: 7px; font-size: 0.72rem; font-weight: 600; color: var(--sage); }
+        .status-dot { display: flex; align-items: center; gap: 7px; font-size: 1.42rem; font-weight: 600; color: var(--sage); }
         .status-dot::before {
             content: '';
             width: 7px; height: 7px;
@@ -387,21 +387,29 @@
 
         /* Hindi - Saffron / Amber gradient */
         .lang-btn:nth-child(2) {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(253, 230, 138, 0.15));
-            border: 1.5px solid rgba(217, 119, 6, 0.4);
+            /* background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(253, 230, 138, 0.15));
+            border: 1.5px solid rgba(217, 119, 6, 0.4); */
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(254, 215, 170, 0.15));
+            border: 1.5px solid rgba(249, 115, 22, 0.4);
         }
         .lang-btn:nth-child(2):hover {
-            box-shadow: 0 8px 20px rgba(217, 119, 6, 0.2);
+            /* box-shadow: 0 8px 20px rgba(217, 119, 6, 0.2);
+            transform: translateY(-2px); */
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2);
             transform: translateY(-2px);
         }
 
         /* English - Electric Blue gradient */
         .lang-btn:nth-child(3) {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(147, 197, 253, 0.15));
-            border: 1.5px solid rgba(37, 99, 235, 0.4);
+            /* background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(147, 197, 253, 0.15));
+            border: 1.5px solid rgba(37, 99, 235, 0.4); */
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(254, 215, 170, 0.15));
+            border: 1.5px solid rgba(249, 115, 22, 0.4);
         }
         .lang-btn:nth-child(3):hover {
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+            /* box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+            transform: translateY(-2px); */
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2);
             transform: translateY(-2px);
         }
 
@@ -1057,7 +1065,7 @@
             border: 1.5px solid rgba(201,168,76,0.3);
             border-radius: var(--radius-sm);
             padding: 12px 14px;
-            font-size: 0.78rem;
+            font-size: 0.98rem;
             color: var(--ink-soft);
             font-weight: 500;
             line-height: 1.5;
@@ -1185,14 +1193,14 @@
                 </button>
             </div>
 
-            <div class="divider"><span>OR SPEAK</span></div>
+            <div class="divider"><span>SELECT TO CONTINUE</span></div>
 
             <div class="voice-tip">
-                💡 Say <strong>"Gujarati"</strong>, <strong>"Hindi"</strong>, or <strong>"English"</strong> clearly after tapping the mic. 
-                <br>Allow microphone access when prompted.
+                💡 Select your preferred language above <strong>"English"</strong>, <strong>"Hindi"</strong>, or <strong>"Gujarati"</strong> to start the Exit Process. 
+                <!-- <br>Allow microphone access when prompted. -->
             </div>
 
-            <button class="voice-btn" id="voice-btn" onclick="startVoiceDetect()">
+            <!-- <button class="voice-btn" id="voice-btn" onclick="startVoiceDetect()">
                 <svg class="mic-icon" viewBox="0 0 24 24">
                     <rect x="9" y="2" width="6" height="12" rx="3"/>
                     <path d="M5 10a7 7 0 0 0 14 0"/>
@@ -1200,7 +1208,7 @@
                     <line x1="8" y1="22" x2="16" y2="22"/>
                 </svg>
                 <span id="voice-btn-text">🎤 Tap to speak your language</span>
-            </button>
+            </button> -->
             <div class="voice-status" id="voice-status"></div>
             <div class="confirm-bar" id="confirm-bar">
                 <span id="confirm-text">Detected: —</span>
@@ -1320,7 +1328,7 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="fullReset()">
+                <button class="btn-primary" onclick="fullReset()" style="display:none;">
                     <span id="btn-reset-text">Scan New QR Code</span>
                 </button>
             </div>
@@ -1734,6 +1742,7 @@ function goToScannerScreen() {
     document.getElementById('scan-hint-text').textContent   = L.scanHint;
     document.getElementById('lbl-vehicle').textContent      = L.lblVehicle;
     document.getElementById('btn-reset-text').textContent   = L.btnReset;
+    setTimeout(() => speak(L.scanHint, selectedLang?.code || 'en-IN'), 1000);
     initializeScanner();
 }
 
