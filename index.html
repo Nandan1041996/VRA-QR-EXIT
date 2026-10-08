@@ -1292,7 +1292,7 @@
                 
                 <!-- "Active Listening" Input Field -->
                 <div style="position: relative; width: 90%; max-width: 300px; margin: 16px auto 0;">
-                    <input type="text" id="gun-scan-input" autocomplete="off" 
+                    <input type="text" id="gun-scan-input" autocomplete="off" autofocus
                        style="width:100%; padding:14px 16px 14px 42px; border:2px solid rgba(16,185,129,0.35); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:0.95rem; font-weight:600; color:var(--ink); background:rgba(255,255,255,0.7); box-shadow:0 4px 12px rgba(16,185,129,0.08); outline:none; transition:all 0.3s ease;" 
                        placeholder="Waiting for scanner..." 
                        onfocus="this.style.borderColor='var(--sage)'; this.style.boxShadow='0 0 0 4px rgba(16,185,129,0.15), 0 4px 12px rgba(16,185,129,0.1)'"
@@ -1753,23 +1753,16 @@ function goToScannerScreen() {
 function initializeScanner() {
     const input = document.getElementById('gun-scan-input');
     input.value = '';
-    
-    // Wait for the slideUp animation to finish before focusing
-    setTimeout(() => {
-        input.focus();
-    }, 500);
+    input.focus();
 
     input.addEventListener('keydown', handleGunInput);
 
     clearInterval(gunRefocusInterval);
     gunRefocusInterval = setInterval(() => {
         if (document.getElementById('screen-scanner').style.display !== 'none') {
-            // Check if the input lost focus; if yes, aggressively pull it back
-                        if (document.activeElement !== input) {
-                input.focus();
-            }
+            input.focus();
         }
-    }, 250);
+    }, 500);
 }
 
 function handleGunInput(e) {
