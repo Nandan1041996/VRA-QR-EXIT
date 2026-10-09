@@ -1807,19 +1807,6 @@ function onScanSuccess(decodedText) {
     .then(data => {
         if (data.status === 'success') {
             showSAPResult(data.sapStatus, data.sapMessage, code, L);
-            // ═════ TESTING OVERRIDE START (Remove this block for LIVE) ═════
-            // If SAP sends empty print data, we artificially create the "PRINT TEST" image
-            if (!data.printImage || data.printImage === "") {
-                const c = document.createElement('canvas');
-                c.width = 400; c.height = 200;
-                const x = c.getContext('2d');
-                x.fillStyle = '#fff'; x.fillRect(0,0,400,200);
-                x.fillStyle = '#000'; x.font = '32px sans-serif'; x.fillText('PRINT TEST QR YPRINT HAS Nothings', 90, 110);
-                data.printImage = c.toDataURL('image/png').split(',')[1];
-                data.printMime = 'image/png';
-                data.sapStatus = 'A'; // Force status to 'A' so the print logic runs
-            }
-            // ═════ TESTING OVERRIDE END ════════════════════════════════════
             if (data.sapStatus === 'A' && data.printImage && (data.printMime || '').indexOf('image/') === 0) {
                 try { printSapImage(data.printImage, data.printMime); } catch (e) { console.warn('Print error:', e); }
             }
