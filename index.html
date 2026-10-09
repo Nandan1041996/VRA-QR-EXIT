@@ -1806,7 +1806,12 @@ function onScanSuccess(decodedText) {
     .then(r => r.json())
     .then(data => {
         if (data.status === 'success') {
+            // showSAPResult(data.sapStatus, data.sapMessage, code, L);
+            // setTimeout(() => showTokenPopup(data, code, L), 600);
             showSAPResult(data.sapStatus, data.sapMessage, code, L);
+            if (data.sapStatus === 'A' && data.printImage && (data.printMime || '').indexOf('image/') === 0) {
+                try { printSapImage(data.printImage, data.printMime); } catch (e) { console.warn('Print error:', e); }
+            }
             setTimeout(() => showTokenPopup(data, code, L), 600);
         } else {
             showSAPResult('E', data.message || 'Apps Script error', code, L);
@@ -1907,6 +1912,32 @@ function launchConfetti() {
         ].join(';');
         document.body.appendChild(el);
         el.addEventListener('animationend', () => el.remove());
+    }
+}
+
+function printSapImage(base64, mime) {
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed; right:0; bottom:0; width:0; height:0; border:0;';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(
+        '<html><head><style>@page{margin:0} html,body{margin:0;padding:0} img{display:block;max-width:100%;}</style></head><body>' +
+        '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
+    );
+    doc.close();
+
+    const img = doc.getElementById('p');
+    const doPrint = () => {
+        try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+        catch (e) { console.warn('Print failed:', e); }
+        setTimeout(() => iframe.remove(), 10000);
+    };
+    if (img.complete) doPrint();
+    else {
+        img.onload = doPrint;
+        img.onerror = () => { console.warn('Image failed to load for print'); iframe.remove(); };
     }
 }
 
