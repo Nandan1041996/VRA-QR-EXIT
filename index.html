@@ -1920,46 +1920,79 @@ function printSapImage(base64, mime) {
     iframe.style.cssText = 'position:fixed; right:0; bottom:0; width:0; height:0; border:0;';
     document.body.appendChild(iframe);
 
+    // Helper to send logs back to Apps Script
+    const logToSheet = (eventName, details) => {
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'log', event: eventName, details: details })
+        }).catch(e => console.warn('Could not send log to sheet:', e));
+    };
+
     // IF SAP SENDS A PDF
     if (mime === 'application/pdf') {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        try {
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+            
+            iframe.src = blobUrl;
+            iframe.onload = () => {
+                setTimeout(() => {
+                    try { 
+                        iframe.contentWindow.focus(); 
+                        iframe.contentWindow.print(); 
+                        logToSheet('PRINT_SUCCESS', 'PDF sent to printer successfully.');
+                    } catch (e) { 
+                        console.warn('Print failed:', e); 
+                        logToSheet('PRINT_ERROR', 'Browser blocked PDF print: ' + e.message);
+                    }
+                    setTimeout(() => { iframe.remove(); URL.revokeObjectURL(blobUrl); }, 10000);
+                }, 500); 
+            };
+        } catch (err) {
+            logToSheet('PRINT_ERROR', 'Failed to process PDF blob: ' + err.message);
         }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const blobUrl = URL.createObjectURL(blob);
-        
-        iframe.src = blobUrl;
-        iframe.onload = () => {
-            setTimeout(() => {
-                try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } 
-                catch (e) { console.warn('Print failed:', e); }
-                setTimeout(() => { iframe.remove(); URL.revokeObjectURL(blobUrl); }, 10000);
-            }, 500); // Give the browser's PDF engine 0.5s to render before firing printer
-        };
     } 
     // IF SAP SENDS AN IMAGE (PNG/JPG)
     else {
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(
-            '<html><head><style>@page{margin:0} html,body{margin:0;padding:0} img{display:block;max-width:100%;}</style></head><body>' +
-            '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
-        );
-        doc.close();
-        
-        const img = doc.getElementById('p');
-        const doPrint = () => {
-            try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } 
-            catch (e) { console.warn('Print failed:', e); }
-            setTimeout(() => iframe.remove(), 10000);
-        };
-        if (img.complete) doPrint();
-        else {
-            img.onload = doPrint;
-            img.onerror = () => { console.warn('Image failed to load for print'); iframe.remove(); };
+        try {
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write(
+                '<html><head><style>@page{margin:0} html,body{margin:0;padding:0} img{display:block;max-width:100%;}</style></head><body>' +
+                '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
+            );
+            doc.close();
+            
+            const img = doc.getElementById('p');
+            const doPrint = () => {
+                try { 
+                    iframe.contentWindow.focus(); 
+                    iframe.contentWindow.print();
+                    logToSheet('PRINT_SUCCESS', 'Image sent to printer successfully.');
+                } catch (e) { 
+                    console.warn('Print failed:', e); 
+                    logToSheet('PRINT_ERROR', 'Browser blocked Image print: ' + e.message);
+                }
+                setTimeout(() => iframe.remove(), 10000);
+            };
+            if (img.complete) doPrint();
+            else {
+                img.onload = doPrint;
+                img.onerror = () => { 
+                    console.warn('Image failed to load for print'); 
+                    logToSheet('PRINT_ERROR', 'Image failed to load in iframe.');
+                    iframe.remove(); 
+                };
+            }
+        } catch (err) {
+            logToSheet('PRINT_ERROR', 'Failed to process Image iframe: ' + err.message);
         }
     }
 }
