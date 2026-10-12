@@ -1969,7 +1969,7 @@ function printSapImage(base64, mime) {
             //     '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
             // );
             doc.write(
-                '<html><head><style>@page{size: 148mm 210mm; margin: 0;} html,body{margin:0;padding:0;width:100%;height:100%;} img{display:block;position:absolute;top:0;left:0;max-width:100%;}</style></head><body>' +
+                '<html><head><style>@page{size: 148mm 210mm; margin: 0;} html,body{margin:0;padding:0;width:100%;height:100%;} img{display:block;position:absolute;top:0;left:5mm;max-width:100%;}</style></head><body>' +
                 '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
             );
             doc.close();
