@@ -1965,7 +1965,7 @@ function printSapImage(base64, mime) {
             const doc = iframe.contentWindow.document;
             doc.open();
             doc.write(
-                '<html><head><style>@page{size: 148mm 210mm; margin: 0;} html,body{margin:0; padding:0;} img{display:block;max-width:100%;}</style></head><body>' +
+                '<html><head><style>@page{margin:0} html,body{margin:0;padding:0} img{display:block;max-width:100%;}</style></head><body>' +
                 '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
             );
             doc.close();
