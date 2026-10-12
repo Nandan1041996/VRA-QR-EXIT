@@ -1965,7 +1965,7 @@ function printSapImage(base64, mime) {
             const doc = iframe.contentWindow.document;
             doc.open();
             doc.write(
-                '<html><head><style>@page{margin:0} html,body{margin:0;padding:0} img{display:block;max-width:100%;}</style></head><body>' +
+                '<html><head><style>@page{margin: 15px 10px 10px 25px;} html,body{margin:0;padding: 10px 0 0 15px;} img{display:block;max-width:100%;}</style></head><body>' +
                 '<img id="p" src="data:' + mime + ';base64,' + base64 + '"></body></html>'
             );
             doc.close();
@@ -2022,6 +2022,28 @@ function startCountdownReset(L) {
     }, 1000);
     autoResetTimer = setTimeout(() => window.location.reload(), 10000);
 }
+
+// ═════ TEST FUNCTION: PRINT DIRECTLY FROM DRIVE FILE ID ═════
+// To use, open F12 Console and type: testDrivePrint('YOUR_DRIVE_FILE_ID')
+function testDrivePrint(fileId) {
+    console.log('Fetching file from Drive...');
+    fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'test_print', fileId: fileId })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.base64) {
+            console.log('File fetched! Sending to printer...');
+            printSapImage(data.base64, data.mime);
+        } else {
+            console.error('Error fetching file:', data.error);
+        }
+    })
+    .catch(err => console.error('Network error:', err));
+}
+// ═════ END TEST FUNCTION: PRINT DIRECTLY FROM DRIVE FILE ID ═════
 
 function fullReset() {
     clearTimeout(autoResetTimer);
